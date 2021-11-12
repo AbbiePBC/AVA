@@ -13,23 +13,23 @@
 unsigned char reverse_bits(unsigned char input){
 
   unsigned char new_char = 0; // initialising
-  for (int i = 1; i < BYTE_LEN+1; i ++){
-    unsigned char tmp = input % (2*i);
-    new_char = new_char | tmp << (BYTE_LEN - i);
-
+  for (int i = 0; i < BYTE_LEN; i ++){
+    unsigned char tmp = input % 2;
+    new_char += (tmp << (BYTE_LEN - i -1 ));
+    input = input>>1; // could check if zero and terminate early but may take longer to check
   }
   return new_char;
 }
 
 
-void reverse_bytes(char** buffer, int bytes){
+void reverse_bytes(unsigned char** buffer, int bytes){
 
-  char* new_buf = (char*) malloc(sizeof(char) * (bytes+1));
-  char* tmp_buf = *buffer; // not strictly needed
+  unsigned char* new_buf = (unsigned char*) malloc(sizeof(unsigned char) * (bytes+1));
+
+  unsigned char* tmp_buf = *buffer; // not strictly needed
   for (int i = 0; i < bytes; i ++){
-    char tmp = tmp_buf[i];
-    new_buf[bytes - i] = reverse_bits(tmp);
-
+    unsigned char tmp = tmp_buf[i];
+    new_buf[bytes - i - 1] = reverse_bits(tmp);
     // could do this in one go and treat the array as one long data type
     // which would be more efficient, however this is more readable
   }
@@ -39,19 +39,19 @@ void reverse_bytes(char** buffer, int bytes){
 }
 
 
-int main(void){
-  int bytes = 4;
-  char *buffer = (char*) malloc(sizeof(char) * (bytes+1));
-  buffer = "ABCD\n";
-  for (int i = 0; i < bytes; i ++){
-    printf("%u \n", buffer);
-  }
+// int main(void){
+//   int bytes = 4;
+//   unsigned char *buffer = (unsigned char*) malloc(sizeof(unsigned char) * (bytes+1));
+//   for (int i = 0; i < bytes; i ++){
+//     buffer[i] = 'C';
+//     printf("%u \n", buffer[i]);
+//   }
 
-  reverse_bytes(&buffer, bytes);
-  for (int i = 0; i < bytes; i ++){
-    printf("%u \n", buffer);
-  }
+//   reverse_bytes(&buffer, bytes);
+//   for (int i = 0; i < bytes; i ++){
+//     printf("%u \n", buffer[i]);
+//   }
 
-  free(buffer);
+//   free(buffer);
 
-}
+// }
